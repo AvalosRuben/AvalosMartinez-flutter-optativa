@@ -7,6 +7,10 @@ class Calcbutton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(onPressed: () => {}, child: Text(numero));
+    return ElevatedButton(
+      onPressed: () => {},
+      style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(20)),
+      child: Text(numero),
+    );
   }
 }
