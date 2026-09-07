@@ -15,7 +15,16 @@ class _MainAppState extends State<MainApp> {
   final TextEditingController _num1Controller = TextEditingController();
   final TextEditingController _num2Controller = TextEditingController();
 
-  final double _resultado = 0;
+  double _resultado = 0;
+
+  void _sumar() {
+    double n1 = double.tryParse(_num1Controller.text) ?? 0;
+    double n2 = double.tryParse(_num2Controller.text) ?? 0;
+
+    setState(() {
+      _resultado = n1 + n2;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
