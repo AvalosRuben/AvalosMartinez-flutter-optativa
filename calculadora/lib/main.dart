@@ -115,6 +115,7 @@ class _MainAppState extends State<MainApp> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text('Resultado:$_resultado'),
+              const SizedBox(height: 40),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
