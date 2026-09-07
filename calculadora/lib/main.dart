@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+final GlobalKey<ScaffoldMessengerState> messengerKey =
+    GlobalKey<ScaffoldMessengerState>();
+
 void main() {
   runApp(const MainApp());
 }
@@ -44,9 +47,41 @@ class _MainAppState extends State<MainApp> {
     });
   }
 
+  void _division() {
+    double n1 = double.tryParse(_num1Controller.text) ?? 0;
+    double n2 = double.tryParse(_num2Controller.text) ?? 0;
+
+    if (n2 == 0) {
+      messengerKey.currentState?.showSnackBar(
+        const SnackBar(
+          content: Text("No de puede dividir sobre 0!!"),
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.indigoAccent,
+        ),
+      );
+      return;
+    }
+
+    if (n1 == 0) {
+      messengerKey.currentState?.showSnackBar(
+        const SnackBar(
+          content: Text("No se dividirá al 0!!"),
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.indigoAccent,
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      _resultado = n1 / n2;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      scaffoldMessengerKey: messengerKey,
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Calculadora'),
@@ -106,7 +141,7 @@ class _MainAppState extends State<MainApp> {
                     child: const Text('MULTIPLICACIÓN'),
                   ),
                   ElevatedButton(
-                    onPressed: () => {},
+                    onPressed: _division,
                     child: const Text('DIVISION'),
                   ),
                 ],
