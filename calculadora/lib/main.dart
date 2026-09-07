@@ -4,8 +4,18 @@ void main() {
   runApp(const MainApp());
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
+
+  @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  final TextEditingController _num1Controller = TextEditingController();
+  final TextEditingController _num2Controller = TextEditingController();
+
+  final double _resultado = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +32,7 @@ class MainApp extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('Resultado: '),
+              const Text('Resultado:'),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -30,6 +40,7 @@ class MainApp extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8.0),
                       child: TextField(
+                        controller: _num1Controller,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: 'Numero1',
@@ -41,6 +52,7 @@ class MainApp extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8.0),
                       child: TextField(
+                        controller: _num2Controller,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: 'Numero2',
