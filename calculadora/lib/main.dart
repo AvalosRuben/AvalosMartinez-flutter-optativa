@@ -31,7 +31,16 @@ class _MainAppState extends State<MainApp> {
     double n2 = double.tryParse(_num2Controller.text) ?? 0;
 
     setState(() {
-      _resultado = n1 + n2;
+      _resultado = n1 - n2;
+    });
+  }
+
+  void _multiplicacion() {
+    double n1 = double.tryParse(_num1Controller.text) ?? 0;
+    double n2 = double.tryParse(_num2Controller.text) ?? 0;
+
+    setState(() {
+      _resultado = n1 * n2;
     });
   }
 
@@ -86,8 +95,14 @@ class _MainAppState extends State<MainApp> {
                 children: [
                   ElevatedButton(onPressed: _sumar, child: const Text('SUMAR')),
                   ElevatedButton(onPressed: _resta, child: const Text('RESTA')),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
                   ElevatedButton(
-                    onPressed: () => {},
+                    onPressed: _multiplicacion,
                     child: const Text('MULTIPLICACIÓN'),
                   ),
                   ElevatedButton(
