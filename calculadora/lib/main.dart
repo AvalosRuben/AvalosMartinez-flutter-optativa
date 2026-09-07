@@ -21,6 +21,17 @@ class _MainAppState extends State<MainApp> {
 
   double _resultado = 0;
 
+  void _cambiarNumero(int numero) {
+    double n1 = double.tryParse(_num1Controller.text) ?? 0;
+    double n2 = double.tryParse(_num2Controller.text) ?? 0;
+
+    if (n1 == 0) {
+      _num1Controller.text = numero.toString();
+    } else if (n2 == 0) {
+      _num2Controller.text = numero.toString();
+    }
+  }
+
   void _borrar() {
     setState(() {
       _num1Controller.clear();
@@ -137,27 +148,27 @@ class _MainAppState extends State<MainApp> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Calcbutton(numero: 1),
-                  Calcbutton(numero: 2),
-                  Calcbutton(numero: 3),
+                  Calcbutton(numero: 1, onPress: () => _cambiarNumero(1)),
+                  Calcbutton(numero: 2, onPress: () => _cambiarNumero(2)),
+                  Calcbutton(numero: 3, onPress: () => _cambiarNumero(3)),
                 ],
               ),
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Calcbutton(numero: 4),
-                  Calcbutton(numero: 5),
-                  Calcbutton(numero: 6),
+                  Calcbutton(numero: 4, onPress: () => _cambiarNumero(4)),
+                  Calcbutton(numero: 5, onPress: () => _cambiarNumero(5)),
+                  Calcbutton(numero: 6, onPress: () => _cambiarNumero(6)),
                 ],
               ),
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Calcbutton(numero: 7),
-                  Calcbutton(numero: 8),
-                  Calcbutton(numero: 9),
+                  Calcbutton(numero: 7, onPress: () => _cambiarNumero(7)),
+                  Calcbutton(numero: 8, onPress: () => _cambiarNumero(8)),
+                  Calcbutton(numero: 9, onPress: () => _cambiarNumero(9)),
                 ],
               ),
               const SizedBox(height: 20),
