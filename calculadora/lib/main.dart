@@ -20,6 +20,14 @@ class _MainAppState extends State<MainApp> {
 
   double _resultado = 0;
 
+  void _borrar() {
+    setState(() {
+      _num1Controller.clear();
+      _num2Controller.clear();
+      _resultado = 0;
+    });
+  }
+
   void _sumar() {
     double n1 = double.tryParse(_num1Controller.text) ?? 0;
     double n2 = double.tryParse(_num2Controller.text) ?? 0;
@@ -146,6 +154,8 @@ class _MainAppState extends State<MainApp> {
                   ),
                 ],
               ),
+              const SizedBox(height: 20),
+              ElevatedButton(onPressed: _borrar, child: Text('BORRAR')),
             ],
           ),
         ),
