@@ -1,3 +1,4 @@
+import 'package:calculadora/calc_button.dart';
 import 'package:flutter/material.dart';
 
 final GlobalKey<ScaffoldMessengerState> messengerKey =
@@ -130,6 +131,33 @@ class _MainAppState extends State<MainApp> {
                       ),
                     ),
                   ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Calcbutton(numero: 1),
+                  Calcbutton(numero: 2),
+                  Calcbutton(numero: 3),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Calcbutton(numero: 4),
+                  Calcbutton(numero: 5),
+                  Calcbutton(numero: 6),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Calcbutton(numero: 7),
+                  Calcbutton(numero: 8),
+                  Calcbutton(numero: 9),
                 ],
               ),
               const SizedBox(height: 20),

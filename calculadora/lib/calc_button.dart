@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Calcbutton extends StatelessWidget {
-  final String numero;
+  final int numero;
 
   const Calcbutton({super.key, required this.numero});
 
@@ -10,7 +10,7 @@ class Calcbutton extends StatelessWidget {
     return ElevatedButton(
       onPressed: () => {},
       style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(20)),
-      child: Text(numero),
+      child: Text(numero.toString()),
     );
   }
 }
