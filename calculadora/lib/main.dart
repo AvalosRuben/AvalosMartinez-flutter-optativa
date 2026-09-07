@@ -41,7 +41,7 @@ class _MainAppState extends State<MainApp> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('Resultado:'),
+              Text('Resultado:$_resultado'),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -71,6 +71,8 @@ class _MainAppState extends State<MainApp> {
                   ),
                 ],
               ),
+              const SizedBox(height: 20),
+              ElevatedButton(onPressed: _sumar, child: const Text('SUMAR')),
             ],
           ),
         ),
