@@ -26,6 +26,15 @@ class _MainAppState extends State<MainApp> {
     });
   }
 
+  void _resta() {
+    double n1 = double.tryParse(_num1Controller.text) ?? 0;
+    double n2 = double.tryParse(_num2Controller.text) ?? 0;
+
+    setState(() {
+      _resultado = n1 + n2;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -72,7 +81,21 @@ class _MainAppState extends State<MainApp> {
                 ],
               ),
               const SizedBox(height: 20),
-              ElevatedButton(onPressed: _sumar, child: const Text('SUMAR')),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(onPressed: _sumar, child: const Text('SUMAR')),
+                  ElevatedButton(onPressed: _resta, child: const Text('RESTA')),
+                  ElevatedButton(
+                    onPressed: () => {},
+                    child: const Text('MULTIPLICACIÓN'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => {},
+                    child: const Text('DIVISION'),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
