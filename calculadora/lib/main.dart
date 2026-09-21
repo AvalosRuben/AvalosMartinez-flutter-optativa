@@ -1,6 +1,7 @@
 import 'package:calculadora/components/menuButton.dart';
 import 'package:calculadora/pages/calculator.dart';
 import 'package:calculadora/pages/pantalla2.dart';
+import 'package:calculadora/pages/pantalla3.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -51,6 +52,16 @@ class MainMenu extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const Pantalla2()),
+                  );
+                },
+              ),
+              menuButton(
+                context,
+                label: "Pantalla 3",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Pantalla3()),
                   );
                 },
               ),
