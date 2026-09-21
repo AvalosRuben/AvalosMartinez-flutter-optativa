@@ -8,7 +8,8 @@ Widget menuButton(
   return OutlinedButton(
     onPressed: onPressed,
     style: OutlinedButton.styleFrom(
-      foregroundColor: Colors.indigoAccent,
+      backgroundColor: Colors.indigoAccent,
+      foregroundColor: Colors.white,
       side: const BorderSide(color: Colors.white, width: 2),
       padding: const EdgeInsets.symmetric(vertical: 16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
