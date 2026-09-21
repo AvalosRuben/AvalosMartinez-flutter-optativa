@@ -1,6 +1,7 @@
 import 'package:calculadora/components/menuButton.dart';
 import 'package:calculadora/pages/calculator.dart';
 import 'package:calculadora/pages/pantalla2.dart';
+import 'package:calculadora/pages/pantalla3.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -21,41 +22,49 @@ class MainMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Menu'),
-          centerTitle: true,
-          backgroundColor: Colors.indigoAccent,
-          foregroundColor: Colors.white,
-          elevation: 1,
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              menuButton(
-                context,
-                label: "Calculadora",
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Calculator()),
-                  );
-                },
-              ),
-              menuButton(
-                context,
-                label: "Pantalla 2",
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Pantalla2()),
-                  );
-                },
-              ),
-            ],
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Menu'),
+        centerTitle: true,
+        backgroundColor: Colors.indigoAccent,
+        foregroundColor: Colors.white,
+        elevation: 1,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            menuButton(
+              context,
+              label: "Calculadora",
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Calculator()),
+                );
+              },
+            ),
+            menuButton(
+              context,
+              label: "Pantalla 2",
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Pantalla2()),
+                );
+              },
+            ),
+            menuButton(
+              context,
+              label: "Pantalla 3",
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Pantalla3()),
+                );
+              },
+            ),
+          ],
         ),
       ),
     );
