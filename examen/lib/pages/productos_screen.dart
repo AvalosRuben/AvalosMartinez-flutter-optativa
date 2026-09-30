@@ -1,4 +1,10 @@
+import 'dart:convert'; // Corregido: antes decía 'dart0convert'
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+import 'product_detail_screen.dart';
+import 'carrito_screen.dart';
 
 class ProductsScreen extends StatefulWidget {
   const ProductsScreen({Key? key}) : super(key: key);
@@ -10,6 +16,7 @@ class ProductsScreen extends StatefulWidget {
 class _ProductsScreenState extends State {
   List products = [];
   bool isLoading = true;
+  String? errorMessage;
 
   @override
   void initState() {
@@ -18,48 +25,50 @@ class _ProductsScreenState extends State {
   }
 
   Future _fetchProducts() async {
-    // Simulación de tiempo de carga de red
-    await Future.delayed(const Duration(seconds: 1));
+    try {
+      final response = await http.get(
+        Uri.parse('https://fakestoreapi.com/products'),
+      );
 
-    setState(() {
-      products = [];
-      isLoading = false;
-    });
+      if (response.statusCode == 200) {
+        setState(() {
+          products = json.decode(response.body); // Ya no dará error
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          errorMessage = 'Error al obtener productos: ${response.statusCode}';
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        errorMessage = 'Error de conexión: $e';
+        isLoading = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final Color primaryColor = const Color(0xFF2196F3);
-
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: primaryColor,
-        elevation: 0,
-        centerTitle: true,
-        title: const Text(
-          'Usuarios',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
+      appBar: AppBar(title: const Text('Productos')),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
-          : products.isEmpty
-          ? const Center(
+          : errorMessage != null
+          ? Center(
               child: Text(
-                'No hay productos disponibles\n(Esperando conexión a API)',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.grey, fontSize: 16),
+                errorMessage!,
+                style: const TextStyle(color: Colors.red, fontSize: 16),
               ),
             )
           : ListView.builder(
               itemCount: products.length,
               itemBuilder: (context, index) {
                 final product = products[index];
+                final category = product['category'] ?? '';
+                final price = product['price']?.toString() ?? '0.00';
+
                 return ListTile(
                   leading: Image.network(
                     product['image'] ?? '',
@@ -80,7 +89,7 @@ class _ProductsScreenState extends State {
                     ),
                   ),
                   subtitle: Text(
-                    "\({product['category']} - \$\){product['price']}",
+                    '$category - \$$price',
                     style: const TextStyle(fontSize: 13, color: Colors.grey),
                   ),
                   contentPadding: const EdgeInsets.symmetric(
@@ -88,15 +97,19 @@ class _ProductsScreenState extends State {
                     vertical: 8,
                   ),
                   onTap: () {
-                    // TODO - Ver detalles del producto enviando el ID (productoById)
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            ProductDetailScreen(productId: product['id']),
+                      ),
+                    );
                   },
                 );
               },
             ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0, // Seleccionado "Inicio"
-        selectedItemColor: primaryColor,
-        unselectedItemColor: Colors.grey,
+        currentIndex: 0,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
           BottomNavigationBarItem(
@@ -105,7 +118,12 @@ class _ProductsScreenState extends State {
           ),
         ],
         onTap: (index) {
-          if (index == 1) {}
+          if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CarritoScreen()),
+            );
+          }
         },
       ),
     );

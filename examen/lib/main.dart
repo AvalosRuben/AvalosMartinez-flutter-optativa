@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'theme/app_theme.dart';
 import 'pages/login.dart';
 
 void main() {
@@ -11,9 +12,10 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
+      theme: AppTheme.lightTheme, // Tema global aplicado a toda la app
+      home: const LoginScreen(),
     );
   }
 }

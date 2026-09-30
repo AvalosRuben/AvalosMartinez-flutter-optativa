@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class ProductDetailScreen extends StatefulWidget {
   final int productId;
@@ -7,12 +10,14 @@ class ProductDetailScreen extends StatefulWidget {
     : super(key: key);
 
   @override
-  State createState() => _ProductDetailScreenState();
+  State<ProductDetailScreen> createState() => _ProductDetailScreenState();
 }
 
-class _ProductDetailScreenState extends State {
-  Map? productData;
+class _ProductDetailScreenState extends State<ProductDetailScreen> {
+  // Mejor tipado para el mapa de datos
+  Map<String, dynamic>? productData;
   bool isLoading = true;
+  String? errorMessage;
 
   @override
   void initState() {
@@ -20,43 +25,57 @@ class _ProductDetailScreenState extends State {
     _fetchProductDetail();
   }
 
-  Future _fetchProductDetail() async {
-    setState(() {
-      productData = null;
-      isLoading = false;
-    });
+  // Se especifica Future
+  Future<void> _fetchProductDetail() async {
+    try {
+      final response = await http.get(
+        Uri.parse('https://fakestoreapi.com/products/${widget.productId}'),
+      );
+
+      // Verificación vital: si el widget ya no está en el árbol, no hacemos nada
+      if (!mounted) return;
+
+      if (response.statusCode == 200) {
+        setState(() {
+          productData = json.decode(response.body);
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          errorMessage = 'Error al cargar el producto: ${response.statusCode}';
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      // Verificación nuevamente por si el error ocurre después de cerrar la pantalla
+      if (!mounted) return;
+
+      setState(() {
+        errorMessage = 'Error de conexión: $e';
+        isLoading = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final Color primaryColor = const Color(0xFF2196F3);
+    final Color primaryColor = Theme.of(context).primaryColor;
 
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: primaryColor,
-        elevation: 0,
-        centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          'Detalle del producto',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        title: const Text('Detalle del producto'),
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
-          : productData == null
-          ? const Center(
+          : errorMessage != null
+          ? Center(
               child: Text(
-                'Esperando datos de la API...',
-                style: TextStyle(color: Colors.grey, fontSize: 16),
+                errorMessage!,
+                style: const TextStyle(color: Colors.red, fontSize: 16),
               ),
             )
           : SingleChildScrollView(
@@ -64,9 +83,8 @@ class _ProductDetailScreenState extends State {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Título del producto
                   Text(
-                    productData!['title'] ?? '',
+                    productData?['title'] ?? '',
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
@@ -74,10 +92,9 @@ class _ProductDetailScreenState extends State {
                     ),
                   ),
                   const SizedBox(height: 24),
-
                   Center(
                     child: Image.network(
-                      productData!['image'] ?? '',
+                      productData?['image'] ?? '',
                       height: 200,
                       fit: BoxFit.contain,
                       errorBuilder: (context, error, stackTrace) =>
@@ -85,9 +102,8 @@ class _ProductDetailScreenState extends State {
                     ),
                   ),
                   const SizedBox(height: 24),
-
                   Text(
-                    productData!['description'] ?? '',
+                    productData?['description'] ?? '',
                     style: const TextStyle(
                       fontSize: 14,
                       color: Colors.black54,
@@ -98,7 +114,7 @@ class _ProductDetailScreenState extends State {
                   const SizedBox(height: 30),
                   Center(
                     child: Text(
-                      'Precio: \$${productData!['price'] ?? 0.0}',
+                      'Precio: \$${productData?['price'] ?? 0.0}',
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
@@ -107,20 +123,13 @@ class _ProductDetailScreenState extends State {
                     ),
                   ),
                   const SizedBox(height: 40),
-
                   Row(
                     children: [
                       Expanded(
                         child: ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: primaryColor,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          onPressed: () {},
+                          onPressed: () {
+                            // TODO: Lógica para agregar
+                          },
                           icon: const Icon(Icons.add_shopping_cart, size: 20),
                           label: const Text(
                             'Agregar',
@@ -134,15 +143,9 @@ class _ProductDetailScreenState extends State {
                       const SizedBox(width: 16),
                       Expanded(
                         child: ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: primaryColor,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          onPressed: () {},
+                          onPressed: () {
+                            // TODO: Lógica para eliminar
+                          },
                           icon: const Icon(Icons.delete_outline, size: 20),
                           label: const Text(
                             'Eliminar',

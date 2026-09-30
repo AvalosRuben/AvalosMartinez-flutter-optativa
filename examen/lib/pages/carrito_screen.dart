@@ -1,17 +1,21 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-import '../models/cart_model.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class CarritoScreen extends StatefulWidget {
   const CarritoScreen({Key? key}) : super(key: key);
 
   @override
+  // CORRECCIÓN: Se especifica el tipo
   State createState() => _CarritoScreenState();
 }
 
+// CORRECCIÓN: Se especifica el tipo
 class _CarritoScreenState extends State {
   List carts = [];
   bool isLoading = true;
+  String? errorMessage;
 
   @override
   void initState() {
@@ -19,40 +23,57 @@ class _CarritoScreenState extends State {
     _fetchCarts();
   }
 
+  // IMPLEMENTACIÓN DE LA API
   Future _fetchCarts() async {
-    await Future.delayed(const Duration(seconds: 1));
+    try {
+      final response = await http.get(
+        Uri.parse('https://fakestoreapi.com/carts'),
+      );
 
-    setState(() {
-      carts = [];
-      isLoading = false;
-    });
+      if (!mounted) return;
+
+      if (response.statusCode == 200) {
+        setState(() {
+          carts = json.decode(response.body);
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          errorMessage = 'Error al cargar los carritos: ${response.statusCode}';
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (!mounted) return;
+
+      setState(() {
+        errorMessage = 'Error de conexión: $e';
+        isLoading = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final Color primaryColor = const Color(0xFF2196F3);
-
     return Scaffold(
-      backgroundColor: Colors.white,
+      // Ya no necesitamos backgroundColor, lo toma del AppTheme global
       appBar: AppBar(
-        backgroundColor: primaryColor,
-        elevation: 0,
-        centerTitle: true,
-        title: const Text(
-          'Carritos de compra',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        // Ya no necesitamos color ni estilos de texto, los toma del AppTheme global
+        title: const Text('Carritos de compra'),
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
+          : errorMessage != null
+          ? Center(
+              child: Text(
+                errorMessage!,
+                style: const TextStyle(color: Colors.red, fontSize: 16),
+              ),
+            )
           : carts.isEmpty
           ? const Center(
               child: Text(
-                'No hay carritos disponibles\n(Esperando conexión a API)',
+                'No hay carritos disponibles',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.grey, fontSize: 16),
               ),
@@ -71,7 +92,8 @@ class _CarritoScreenState extends State {
                     ),
                   ),
                   title: Text(
-                    'Cliente - ${cart.userId}',
+                    // Accedemos a la propiedad del JSON mapeado
+                    'Cliente - ${cart['userId']}',
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -86,18 +108,19 @@ class _CarritoScreenState extends State {
                     horizontal: 20,
                     vertical: 8,
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    // TODO - Navegar a detalles del carrito enviando cart['id']
+                  },
                 );
               },
             ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 1,
-        selectedItemColor: primaryColor,
-        unselectedItemColor: Colors.grey,
+        currentIndex: 1, // Mantiene seleccionado "Carritos"
+        // Colores omitidos para que herede del AppTheme
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
+            icon: Icon(Icons.calculate),
             label: 'Carritos',
           ),
         ],
